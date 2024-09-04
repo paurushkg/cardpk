@@ -16,8 +16,8 @@
             perspective: 1000px;
             margin: auto;
             width: 100%;
-            max-width: 400px;
-            height: 450px;
+            max-width: 460px;
+            height: 650px;
         }
 
         .flipbook {
@@ -33,11 +33,14 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: white;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
             transform-origin: left;
             backface-visibility: hidden;
             transition: transform 0.5s ease;
+            background: url('back.jpg');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .card-body {
@@ -60,52 +63,62 @@
         .btn-group .btn {
             margin-right: 5px; /* Adds space between the buttons */
         }
+
+
     </style>
 </head>
 <body>
 <div class="container pt-3">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-6 d-flex justify-content-center">
-            <div class="card pb-3" style="width: 15rem;">
-                <img src="GaneshJi.png" class="card-img-top" alt="Ganesh Ji" width="200" height="200">
-                <div class="card-body">
-                    <p class="card-text text-center">
-                        || श्री गणेशाय नमः ||
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row justify-content-center mt-3">
         <div class="col-12 col-md-8 d-flex justify-content-center">
             <div class="flipbook-container">
                 <div class="flipbook">
-                    <div class="card page">
+                    <div class="card page " style="object-fit: contain;">
                         <div class="card-body">
-                            <h2>Page 1</h2>
-                            <p>Welcome to the Flip Book!</p>
+                            <div class="row justify-content-center">
+                                <img src="GaneshJi.png" class="card-img-top" alt="Ganesh Ji" width="200" height="300">
+                                <div>
+                                    <h1>
+                                        <p class="card-text text-center">
+                                            || श्री गणेशाय नमः ||
+                                        </p>
+                                    </h1>
+                                    <p class="card-text text-center pb-5">
+                                        वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>
+                                        निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥
+                                        <hr>
+                                    </p>
+                                    <h4>
+
+                                        <p class="card-text text-center">
+                                            श्री पौरुष कुमार गुप्ता
+
+                                        </p>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card page bg-warning">
+                    <div class="card page ">
                         <div class="card-body">
                             <h2>Page 2</h2>
                             <p>Let's explore some content.</p>
                         </div>
                     </div>
-                    <div class="card page bg-success text-white">
+                    <div class="card page ">
                         <div class="card-body">
                             <h2>Page 3</h2>
                             <p>Here is some more information.</p>
                         </div>
                     </div>
-                    <div class="card page bg-info text-white">
+                    <div class="card page ">
                         <div class="card-body">
                             <h2>Page 4</h2>
                             <p>Almost at the end.</p>
                         </div>
                     </div>
-                    <div class="card page bg-danger text-white">
+                    <div class="card page">
                         <div class="card-body">
                             <h2>Page 5</h2>
                             <p>Thanks for flipping through!</p>
@@ -124,6 +137,8 @@
             </div>
             <button id="prevPage" class="btn btn-primary btn-group m-2">Previous</button>
             <button id="nextPage" class="btn btn-primary m-2">Next</button>
+            <button id="closePage" class="btn btn-danger m-2">Close</button>
+
         </div>
     </div>
 
@@ -132,14 +147,15 @@
 </div>
 
 <script>
-     var audio = document.getElementById("backgroundMusic");
-     audio.volume = 0.5;
+    var audio = document.getElementById("backgroundMusic");
+    audio.volume = 0.5;
     const pages = document.querySelectorAll('.page');
     let currentPage = 0;
 
     const prevButton = document.getElementById('prevPage');
     const openButton = document.getElementById('openPage');
     const nextButton = document.getElementById('nextPage');
+    const closeButton = document.getElementById('closePage');
     const buttonGroup = document.querySelector('.btn-group');
 
     const backgroundMusic = document.getElementById('backgroundMusic');
@@ -163,14 +179,18 @@
             openButton.style.display = 'block';
             buttonGroup.style.display = 'none';
             nextButton.style.display = 'none';
+            closeButton.style.display = 'none';
+
         } else if (currentPage === pages.length - 1) {
             openButton.style.display = 'none';
             buttonGroup.style.display = 'block';
             nextButton.style.display = 'none';
+            closeButton.style.display = 'block';
         } else {
             openButton.style.display = 'none';
             buttonGroup.style.display = 'block';
             nextButton.style.display = 'block';
+            closeButton.style.display = 'none';
         }
     }
 
@@ -197,6 +217,11 @@
             currentPage--;
             updateFlipbook();
         }
+    });
+
+    closeButton.addEventListener('click', () => {
+        currentPage = 0;
+        updateFlipbook();
     });
 
     // Initialize the flipbook to display the first page correctly
