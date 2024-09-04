@@ -63,7 +63,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container pt-3">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 d-flex justify-content-center">
             <div class="card pb-3" style="width: 15rem;">
@@ -120,19 +120,20 @@
     <div class="row justify-content-center mt-3">
         <div class="col-12 d-flex justify-content-center">
             <div class="flipbook-controls">
-                <!-- Open Button for the first page -->
                 <button id="openPage" class="btn btn-primary">Open</button>
-
-                <!-- Corrected Previous and Next Buttons Group -->
-
             </div>
             <button id="prevPage" class="btn btn-primary btn-group m-2">Previous</button>
             <button id="nextPage" class="btn btn-primary m-2">Next</button>
         </div>
     </div>
+
+    <!-- Audio Player -->
+    <audio id="backgroundMusic" src="audio.mp3" loop></audio>
 </div>
 
 <script>
+     var audio = document.getElementById("backgroundMusic");
+     audio.volume = 0.5;
     const pages = document.querySelectorAll('.page');
     let currentPage = 0;
 
@@ -140,6 +141,9 @@
     const openButton = document.getElementById('openPage');
     const nextButton = document.getElementById('nextPage');
     const buttonGroup = document.querySelector('.btn-group');
+
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    let isMusicPlaying = false;
 
     function updateFlipbook() {
         pages.forEach((page, index) => {
@@ -155,21 +159,18 @@
             }
         });
 
-        // Show/hide buttons based on the current page
-        debugger
         if (currentPage === 0) {
-            openButton.style.display = 'block'; // Show the "Open" button on the first page
-            buttonGroup.style.display = 'none'; // Hide the button group
-                    nextButton.style.display = 'none'; // Show the "Next" button on intermediate pages
-
+            openButton.style.display = 'block';
+            buttonGroup.style.display = 'none';
+            nextButton.style.display = 'none';
         } else if (currentPage === pages.length - 1) {
-            openButton.style.display = 'none'; // Hide the "Open" button
-            buttonGroup.style.display = 'block'; // Show the button group
-            nextButton.style.display = 'none'; // Hide the "Next" button on the last page
+            openButton.style.display = 'none';
+            buttonGroup.style.display = 'block';
+            nextButton.style.display = 'none';
         } else {
-            openButton.style.display = 'none'; // Hide the "Open" button
-            buttonGroup.style.display = 'block'; // Show the button group
-            nextButton.style.display = 'block'; // Show the "Next" button on intermediate pages
+            openButton.style.display = 'none';
+            buttonGroup.style.display = 'block';
+            nextButton.style.display = 'block';
         }
     }
 
@@ -177,6 +178,10 @@
         if (currentPage < pages.length - 1) {
             currentPage++;
             updateFlipbook();
+            if (!isMusicPlaying) {
+                backgroundMusic.play();
+                isMusicPlaying = true;
+            }
         }
     });
 
