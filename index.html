@@ -16,7 +16,7 @@
             perspective: 1000px;
             margin: auto;
             width: 100%;
-            max-width: 400px; /* Adjust the max-width for smaller screens */
+            max-width: 400px;
             height: 450px;
         }
 
@@ -53,15 +53,19 @@
             margin-top: 10px;
         }
 
-        .flipbook-controls button {
-            margin: 0 10px;
+        .btn-group {
+            display: none; /* Hidden by default, shown only on intermediate pages */
+        }
+
+        .btn-group .btn {
+            margin-right: 5px; /* Adds space between the buttons */
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-md-6 d-flex justify-content-center pt-3">
+        <div class="col-12 col-md-6 d-flex justify-content-center">
             <div class="card pb-3" style="width: 15rem;">
                 <img src="GaneshJi.png" class="card-img-top" alt="Ganesh Ji" width="200" height="200">
                 <div class="card-body">
@@ -112,12 +116,18 @@
         </div>
     </div>
 
+    <!-- Flipbook Controls -->
     <div class="row justify-content-center mt-3">
         <div class="col-12 d-flex justify-content-center">
             <div class="flipbook-controls">
-                <button id="prevPage" class="btn btn-primary">Previous Page</button>
-                <button id="nextPage" class="btn btn-primary">Next Page</button>
+                <!-- Open Button for the first page -->
+                <button id="openPage" class="btn btn-primary">Open</button>
+
+                <!-- Corrected Previous and Next Buttons Group -->
+
             </div>
+            <button id="prevPage" class="btn btn-primary btn-group m-2">Previous</button>
+            <button id="nextPage" class="btn btn-primary m-2">Next</button>
         </div>
     </div>
 </div>
@@ -126,29 +136,66 @@
     const pages = document.querySelectorAll('.page');
     let currentPage = 0;
 
+    const prevButton = document.getElementById('prevPage');
+    const openButton = document.getElementById('openPage');
+    const nextButton = document.getElementById('nextPage');
+    const buttonGroup = document.querySelector('.btn-group');
+
     function updateFlipbook() {
         pages.forEach((page, index) => {
             if (index < currentPage) {
                 page.style.transform = "rotateY(-180deg)";
+                page.style.zIndex = index;
+            } else if (index === currentPage) {
+                page.style.transform = "rotateY(0deg)";
+                page.style.zIndex = pages.length;
             } else {
                 page.style.transform = "rotateY(0deg)";
+                page.style.zIndex = pages.length - index;
             }
         });
+
+        // Show/hide buttons based on the current page
+        debugger
+        if (currentPage === 0) {
+            openButton.style.display = 'block'; // Show the "Open" button on the first page
+            buttonGroup.style.display = 'none'; // Hide the button group
+                    nextButton.style.display = 'none'; // Show the "Next" button on intermediate pages
+
+        } else if (currentPage === pages.length - 1) {
+            openButton.style.display = 'none'; // Hide the "Open" button
+            buttonGroup.style.display = 'block'; // Show the button group
+            nextButton.style.display = 'none'; // Hide the "Next" button on the last page
+        } else {
+            openButton.style.display = 'none'; // Hide the "Open" button
+            buttonGroup.style.display = 'block'; // Show the button group
+            nextButton.style.display = 'block'; // Show the "Next" button on intermediate pages
+        }
     }
 
-    document.getElementById('nextPage').addEventListener('click', () => {
+    openButton.addEventListener('click', () => {
         if (currentPage < pages.length - 1) {
             currentPage++;
             updateFlipbook();
         }
     });
 
-    document.getElementById('prevPage').addEventListener('click', () => {
+    nextButton.addEventListener('click', () => {
+        if (currentPage < pages.length - 1) {
+            currentPage++;
+            updateFlipbook();
+        }
+    });
+
+    prevButton.addEventListener('click', () => {
         if (currentPage > 0) {
             currentPage--;
             updateFlipbook();
         }
     });
+
+    // Initialize the flipbook to display the first page correctly
+    updateFlipbook();
 </script>
 
 </body>
